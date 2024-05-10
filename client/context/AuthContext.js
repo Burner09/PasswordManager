@@ -40,7 +40,7 @@ export const AuthProvider = ({children}) => {
       setUserEmail(await SecureStore.getItemAsync('userEmail'))
       let userToken = await SecureStore.getItemAsync('userToken');
       if(userToken !== null) {
-        axios.post('http://192.168.1.19:3001/auth', {token: userToken})
+        axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/auth`, {token: userToken})
         .then((res) => {
           console.log(res.data);
           setUserToken(userToken);

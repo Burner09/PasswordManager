@@ -26,7 +26,7 @@ export default function RegisterScreen({navigation}) {
             return;
           }
 
-          axios.post('http://192.168.1.19:3001/signup', values)
+          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/signup`, values)
           .then((res) => {
             setIsLoading(false);
             navigation.navigate('Login')

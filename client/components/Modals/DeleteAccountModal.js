@@ -23,7 +23,7 @@ export default function DeleteAccountModal({ onDismiss, visible }) {
             setIsLoading(false);
             return;
           }
-          axios.post(`http://192.168.1.19:3001/deleteaccount/${userEmail}`, values)
+          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/deleteaccount/${userEmail}`, values)
             .then((res) => {
               console.log(res.data)
               onDismiss();

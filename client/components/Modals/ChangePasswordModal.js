@@ -29,7 +29,7 @@ export default function ChangePasswordModal({ onDismiss, visible }) {
             return;
           }
 
-          axios.put(`http://192.168.1.19:3001/changepassword/${userEmail}`, values)
+          axios.put(`${process.env.EXPO_PUBLIC_API_SERVERURL}/changepassword/${userEmail}`, values)
             .then((res) => {
               console.log(res.data)
               onDismiss();

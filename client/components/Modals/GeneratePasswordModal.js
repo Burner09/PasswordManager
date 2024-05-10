@@ -22,7 +22,7 @@ export default function GeneratePasswordModal({ onDismiss,visible, usePassword }
         initialValues={{ word: '' }}
         onSubmit={async (values, { resetForm }) => {
           setIsLoading(true);
-          axios.post('http://192.168.1.19:3001/generate', values)
+          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/generate`, values)
             .then((res) => {
               setGeneratedPassword(res.data)
               setIsLoading(false);

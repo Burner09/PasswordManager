@@ -25,7 +25,7 @@ export default function AddPasswordScreen({ navigation }) {
                 setIsLoading(false);
                 return;
               }
-              axios.put(`http://192.168.1.19:3001/passwords/${userEmail}`, {passwordDetails: values})
+              axios.put(`${process.env.EXPO_PUBLIC_API_SERVERURL}/passwords/${userEmail}`, {passwordDetails: values})
                 .then((res) => {
                   console.log(res.data)
                   navigation.navigate('Home')

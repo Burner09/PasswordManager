@@ -23,7 +23,7 @@ export default function LoginScreen({ navigation }) {
             setIsLoading(false);
             return;
           }
-          axios.post('http://192.168.1.19:3001/signin', values)
+          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/signin`, values)
             .then((res) => {
               login(res.data.token, values.email);
               setIsLoading(false);

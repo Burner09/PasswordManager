@@ -8,7 +8,7 @@ export default function AllPasswordScreen({ navigation }) {
   const { userEmail } = useContext(AuthContext);
 
   const fetchData = () => {
-    axios.get(`http://192.168.1.19:3001/passwords/${userEmail}`)
+    axios.get(`${process.env.EXPO_PUBLIC_API_SERVERURL}/passwords/${userEmail}`)
       .then((res) => {
         setAccounts(res.data);
       }).catch((err) => {
