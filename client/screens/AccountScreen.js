@@ -28,19 +28,10 @@ export default function AccountScreen() {
             Delete Account
           </Button>
         </View>
-        
-        <View style={{padding: 20}}>
-          <TouchableOpacity onPress={() => logout()} style={{paddingVertical: 15}}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  marginLeft: 5,
-                }}>
-                Sign Out
-              </Text>
-            </View>
-          </TouchableOpacity>
+        <View>
+          <Button style={{marginTop: 30}} onPress={() => logout()}>
+            Sign Out
+          </Button>
         </View>
       </PaperProvider>
     </SafeAreaView>

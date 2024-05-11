@@ -16,7 +16,6 @@ const userSchema = mongoose.Schema({
   storedPasswords: [{
     type: {
       type: String,
-      enum: ['Device', 'Online Service'],
       required: true
     },
     name: {

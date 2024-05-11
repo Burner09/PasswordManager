@@ -49,12 +49,12 @@ export default function AddPasswordScreen({ navigation }) {
                   <Text style={{ fontSize: 18, fontWeight: 600 }}>Type:</Text>
                   <View style={{ flexDirection: 'row', gap: 20 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <RadioButton value="Device" />
-                      <Text style={{ fontSize: 16 }}>Device</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                       <RadioButton value="Online Service" />
                       <Text style={{ fontSize: 16 }}>Online Service</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <RadioButton value="Device" />
+                      <Text style={{ fontSize: 16 }}>Device</Text>
                     </View>
                   </View>
                 </RadioButton.Group>
@@ -98,7 +98,7 @@ export default function AddPasswordScreen({ navigation }) {
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
-                    marginBottom: 30,
+                    marginBottom: 10,
                   }}>
                 </View>
                 <View>
@@ -106,7 +106,7 @@ export default function AddPasswordScreen({ navigation }) {
                     props.setFieldValue('password', password);
                     setShowModal(false);
                   }} onDismiss={() => setShowModal(false)}/>
-                  <Button style={{marginTop: 30}} onPress={() => setShowModal(true)}>
+                  <Button style={{marginTop: 10}} onPress={() => setShowModal(true)}>
                     Generate Password
                   </Button>
                 </View>

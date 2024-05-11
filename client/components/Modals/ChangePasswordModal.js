@@ -85,7 +85,7 @@ export default function ChangePasswordModal({ onDismiss, visible }) {
                   <Text style={{fontSize: 15, fontWeight: 600}}>Cancel</Text>
                 </Button>
                 <Button style={{flex: 1, borderRadius: 4}} loading={isLoading} mode="contained" onPress={props.handleSubmit}>
-                  <Text style={{fontSize: 15, fontWeight: 600}}>Change Password</Text>
+                  <Text style={{fontSize: 15, fontWeight: 600}}>Confirm</Text>
                 </Button>
               </View>             
             </View>

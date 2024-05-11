@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 
 import User from './Models/UserSchema.js';
 import { verifyToken } from './middleware/authMiddleware.js';
-import { generateRandomPassword, generatePasswordWithWord, encryptPasswordDetails, decryptPasswordDetails, createToken } from './util.js';
+import { generateRandomPassword, generatePasswordWithWord, decryptPasswordDetails, encryptPasswordDetails,  createToken } from './util.js';
 
 const app = express();
 
@@ -27,7 +27,7 @@ app.post('/generate', (req, res) => {
     let generatedPassword;
 
     if(word) {
-      generatedPassword = generatePasswordWithWord(word, length);
+      generatedPassword = generatePasswordWithWord(word.replace(/\s/g, ''), length);
     } else {
       generatedPassword = generateRandomPassword(length);
     }
@@ -85,7 +85,7 @@ app.post('/signin', async (req, res) => {
       return res.status(400).json({message: "Invalid email or password"});
     }
 
-    const token = createToken(user._id);
+    const token = await createToken(user._id);
     res.status(200).json({message: "Authentication successful", token} );
   } catch(err) {
     console.error(err);
@@ -97,24 +97,29 @@ app.get('/passwords/:email', async (req, res) => {
   const { email } = req.params;
 
   try {
-    const decryptionKey = process.env.ENCRYPTION_KEY;
-
     const user = await User.findOne({ email });
 
-    const decryptedPasswords = user.storedPasswords.map(password => {
-      const { decryptedPassword, decryptedUserName } = decryptPasswordDetails(password.password, password.userName, password.iv, decryptionKey);
-      return {
+    if (!user) {
+      return res.status(404).json('User not found');
+    }
+
+    const decryptedPasswords = await Promise.all(user.storedPasswords.map(async password => {
+      const iv = password.iv;
+      const passwordData = {
+        _id: password._id,
         type: password.type,
         name: password.name,
         websiteOrDevice: password.websiteOrDevice,
-        userName: decryptedUserName,
-        password: decryptedPassword
-      };
-    });
-
+        userName: password.userName,
+        password: password.password
+      }
+      const decryptedFields = await decryptPasswordDetails(passwordData, iv, process.env.ENCRYPTION_KEY);
+      return decryptedFields;
+    }));
+    
     res.status(200).json(decryptedPasswords);
   } catch(err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).json('Internal server error');
   }
 });
@@ -126,20 +131,16 @@ app.put('/passwords/:email', async (req, res) => {
   try {
     const encryptionKey = process.env.ENCRYPTION_KEY;
 
-    const { encryptedPassword, encryptedUserName, base64iv } = encryptPasswordDetails(passwordDetails, encryptionKey);
+    const { encryptedFields, base64iv } = await encryptPasswordDetails(passwordDetails, encryptionKey);
 
     const user = await User.findOne({ email });
 
-    passwordDetails.password = encryptedPassword;
-    passwordDetails.userName = encryptedUserName;
-    passwordDetails.iv = base64iv;
-
-    await user.storedPasswords.push(passwordDetails);
+    user.storedPasswords.push({ ...encryptedFields, iv: base64iv });
     await user.save();
 
     res.status(200).json('Password stored successfully');
   } catch(err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).json('Internal server error');
   }
 });
@@ -149,6 +150,7 @@ app.delete('/passwords/:email/:passwordId', async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
+    console.log(user)
 
     const passwordIndex = user.storedPasswords.findIndex(password => password._id.toString() === passwordId);
     if (passwordIndex === -1) {

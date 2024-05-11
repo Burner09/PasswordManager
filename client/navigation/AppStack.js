@@ -5,7 +5,7 @@ import { Icon } from 'react-native-paper';
 import HomeScreen from '../screens/HomeScreen';
 import AccountScreen from '../screens/AccountScreen';
 import AddPasswordScreen from '../screens/AddPasswordScreen';
-import AllPasswordScreen from '../screens/AllPasswordScreen';
+import PasswordStack from './PasswordStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,18 +29,18 @@ export default function AppStack() {
       />
 
       <Tab.Screen 
-        name='Add'
-        component={AddPasswordScreen}
+        name='Passwords'
+        component={PasswordStack}
         options={{
-          tabBarIcon: ({ color }) => (<Icon source="plus-thick" color={color} size={35} />),
+          tabBarIcon: ({ color }) => (<Icon source="shield-lock" color={color} size={32} />),
         }}
       />
 
       <Tab.Screen 
-        name='Passwords'
-        component={AllPasswordScreen}
+        name='Add'
+        component={AddPasswordScreen}
         options={{
-          tabBarIcon: ({ color }) => (<Icon source="shield-lock" color={color} size={32} />),
+          tabBarIcon: ({ color }) => (<Icon source="plus-thick" color={color} size={35} />),
         }}
       />
 
