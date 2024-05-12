@@ -2,7 +2,6 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'react-native-paper';
 
-import HomeScreen from '../screens/HomeScreen';
 import AccountScreen from '../screens/AccountScreen';
 import AddPasswordScreen from '../screens/AddPasswordScreen';
 import PasswordStack from './PasswordStack';
@@ -15,24 +14,16 @@ export default function AppStack() {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarInactiveTintColor: '#000',
-        tabBarActiveTintColor: 'purple',
-        tabBarStyle: { height: 60 },
+        tabBarInactiveTintColor: '#c8efe4',
+        tabBarActiveTintColor: '#f27d42',
+        tabBarStyle: { backgroundColor: '#022444', height: 70 },
       }}
     >
-      <Tab.Screen 
-        name='Home'
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color }) => (<Icon source="home" color={color} size={35} />),
-        }}
-      />
-
       <Tab.Screen 
         name='Passwords'
         component={PasswordStack}
         options={{
-          tabBarIcon: ({ color }) => (<Icon source="shield-lock" color={color} size={32} />),
+          tabBarIcon: ({ color }) => (<Icon source="shield-lock" color={color} size={38} />),
         }}
       />
 
@@ -40,7 +31,7 @@ export default function AppStack() {
         name='Add'
         component={AddPasswordScreen}
         options={{
-          tabBarIcon: ({ color }) => (<Icon source="plus-thick" color={color} size={35} />),
+          tabBarIcon: ({ color }) => (<Icon source="plus-thick" color={color} size={40} />),
         }}
       />
 
@@ -48,7 +39,7 @@ export default function AppStack() {
         name='Account'
         component={AccountScreen}
         options={{
-          tabBarIcon: ({ color }) => (<Icon source="account" color={color} size={35} />),
+          tabBarIcon: ({ color }) => (<Icon source="account" color={color} size={40} />),
         }}
       />
     </Tab.Navigator>

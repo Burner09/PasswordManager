@@ -2,6 +2,16 @@ import mongoose from 'mongoose';
 import validator from 'validator'
 
 const userSchema = mongoose.Schema({
+  fullName: {
+    encrypted: {
+      type: String,
+      required: true
+    },
+    iv: {
+      type: String,
+      required: true
+    }
+  },
   email: {
     type: String,
     required: [true, "An email is required"],

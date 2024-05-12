@@ -8,13 +8,16 @@ export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
+  const [userFullName, setUserFullName] = useState(null);
 
-  const login = (token, email) => {
+  const login = (token, email, fullName) => {
     setIsLoading(true);
     setUserToken(token);
     setUserEmail(email)
+    setUserFullName(fullName)
     SecureStore.setItemAsync('userToken', token);
     SecureStore.setItemAsync('userEmail', email);
+    SecureStore.setItemAsync('userFullName', fullName);
     setIsLoading(false);
   }
 
@@ -29,8 +32,10 @@ export const AuthProvider = ({children}) => {
     setIsLoading(true);
     SecureStore.deleteItemAsync('userToken')
     SecureStore.deleteItemAsync('userEmail');
+    SecureStore.deleteItemAsync('userFullName');
     setUserToken(null);
     setUserEmail(null);
+    setUserFullName(null);
     setIsLoading(false);
   }
 
@@ -38,6 +43,7 @@ export const AuthProvider = ({children}) => {
     try {
       setIsLoading(true);
       setUserEmail(await SecureStore.getItemAsync('userEmail'))
+      setUserFullName(await SecureStore.getItemAsync('userFullName'))
       let userToken = await SecureStore.getItemAsync('userToken');
       if(userToken !== null) {
         axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/auth`, {token: userToken})
@@ -65,7 +71,7 @@ export const AuthProvider = ({children}) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{login, logout, deleteAccount, isLoading, userToken, userEmail}}>
+    <AuthContext.Provider value={{login, logout, deleteAccount, isLoading, userToken, userEmail, userFullName}}>
       {children}
     </AuthContext.Provider>
   );

@@ -13,11 +13,11 @@ export default function AddPasswordScreen({ navigation }) {
   const { userEmail } = useContext(AuthContext);
   
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 35 }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 35, backgroundColor: '#c8efe4' }}>
       <PaperProvider>
         <View style={{ flex: 1, padding: 15 }}>
           <Formik
-            initialValues={{ type: '', name: '', websiteOrDevice: '', userName: '', password: '' }}
+            initialValues={{ type: 'Online Service', name: '', websiteOrDevice: '', userName: '', password: '' }}
             onSubmit={async (values, { resetForm }) => {
               setIsLoading(true);
               if (!values.type || !values.name || !values.websiteOrDevice || !values.userName || !values.password) {
@@ -25,10 +25,10 @@ export default function AddPasswordScreen({ navigation }) {
                 setIsLoading(false);
                 return;
               }
-              axios.put(`${process.env.EXPO_PUBLIC_API_SERVERURL}/passwords/${userEmail}`, {passwordDetails: values})
+              axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/passwords/${userEmail}`, {passwordDetails: values})
                 .then((res) => {
                   console.log(res.data)
-                  navigation.navigate('Home')
+                  navigation.navigate('Passwords')
                   setIsLoading(false);
                   setMessage('');
                   resetForm();
@@ -41,20 +41,20 @@ export default function AddPasswordScreen({ navigation }) {
           >
             {(props) => (
               <View style={{gap: 20}}>
-                <Text style={{ fontSize: 30, fontWeight: '800', color: '#333', marginBottom: 20, }}>
+                <Text style={{ fontSize: 32, fontWeight: '800', color: '#022444', marginBottom: 20, }}>
                   Save New Account
                 </Text>
                 
                 <RadioButton.Group onValueChange={props.handleChange('type')} value={props.values.type}>
-                  <Text style={{ fontSize: 18, fontWeight: 600 }}>Type:</Text>
+                  <Text style={{ fontSize: 18, fontWeight: 600, color: '#022444' }}>Type:</Text>
                   <View style={{ flexDirection: 'row', gap: 20 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <RadioButton value="Online Service" />
-                      <Text style={{ fontSize: 16 }}>Online Service</Text>
+                      <RadioButton value="Online Service" color='#f27d42' />
+                      <Text style={{ fontSize: 16, color: '#022444' }}>Online Service</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <RadioButton value="Device" />
-                      <Text style={{ fontSize: 16 }}>Device</Text>
+                      <RadioButton value="Device" color='#f27d42' />
+                      <Text style={{ fontSize: 16, color: '#022444' }}>Device</Text>
                     </View>
                   </View>
                 </RadioButton.Group>
@@ -63,6 +63,8 @@ export default function AddPasswordScreen({ navigation }) {
                     mode="outlined"
                     label="Name"
                     placeholder='This account'
+                    outlineColor='#022444'
+                    activeOutlineColor="#022444"
                     value={props.values.name}
                     onChangeText={props.handleChange('name')}
                     style={{ flex: 1 }}
@@ -71,6 +73,8 @@ export default function AddPasswordScreen({ navigation }) {
                     mode="outlined"
                     label="Website/ Device"
                     placeholder='youtube.com'
+                    outlineColor='#022444'
+                    activeOutlineColor="#022444"
                     value={props.values.websiteOrDevice}
                     onChangeText={props.handleChange('websiteOrDevice')}
                     style={{ flex: 1 }}
@@ -80,6 +84,8 @@ export default function AddPasswordScreen({ navigation }) {
                   mode="outlined"
                   label="Username/ Email"
                   placeholder='Byrd_202'
+                  outlineColor='#022444'
+                  activeOutlineColor="#022444"
                   value={props.values.userName}
                   onChangeText={props.handleChange('userName')}
                 />
@@ -87,12 +93,21 @@ export default function AddPasswordScreen({ navigation }) {
                   mode="outlined"
                   label="Password"
                   placeholder='Abc123(;-;)'
+                  outlineColor='#022444'
+                  activeOutlineColor="#022444"
                   value={props.values.password}
                   onChangeText={props.handleChange('password')}
                 />
                 {message && <Text style={{color: 'red'}}>{message}</Text>}
-                <Button style={{borderRadius: 4}} loading={isLoading} mode="contained" onPress={props.handleSubmit}>
-                  <Text style={{fontSize: 18, fontWeight: 600}}>Save Account</Text>
+                <Button 
+                  style={{borderRadius: 4}} 
+                  labelStyle={{fontSize: 18, fontWeight: 600}}
+                  loading={isLoading} 
+                  buttonColor='#f27d42' 
+                  mode="contained" 
+                  onPress={props.handleSubmit}
+                >
+                  Save Account
                 </Button>
                 <View
                   style={{
@@ -106,7 +121,7 @@ export default function AddPasswordScreen({ navigation }) {
                     props.setFieldValue('password', password);
                     setShowModal(false);
                   }} onDismiss={() => setShowModal(false)}/>
-                  <Button style={{marginTop: 10}} onPress={() => setShowModal(true)}>
+                  <Button style={{marginTop: 10}} textColor='#022444' onPress={() => setShowModal(true)}>
                     Generate Password
                   </Button>
                 </View>

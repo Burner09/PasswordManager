@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import cookieParser from 'cookie-parser';
 
 import User from './Models/UserSchema.js';
@@ -44,28 +45,40 @@ app.post('/auth', verifyToken, (req, res) => {
 })
 
 app.post('/signup', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, firstName, lastName } = req.body;
 
   try {
     const user = await User.findOne({ email });
 
     if (user) {
-      return res.status(400).json({message: "User already exist"});
+      return res.status(400).json({ message: "User already exists" });
     }
 
     if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(password)) {
-      return res.status(400).json({message: "Password does not meet the requirements"});
+      return res.status(400).json({ message: "Password does not meet the requirements" });
     }
+
+    const fullName = firstName + ' ' + lastName;
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = User({email, password: hashedPassword});
+    const fullNameIv = crypto.randomBytes(16);
+    const cipherFullName = crypto.createCipheriv('aes-256-cbc', process.env.ENCRYPTION_KEY, fullNameIv);
+    let encryptedFullName = cipherFullName.update(fullName, 'utf-8', 'hex');
+    encryptedFullName += cipherFullName.final('hex');
+    const base64FullNameIv = fullNameIv.toString('base64');
+
+    const newUser = User({
+      fullName: { encrypted: encryptedFullName, iv: base64FullNameIv },
+      email,
+      password: hashedPassword
+    });
     await newUser.save();
 
-    res.status(201).json('Account created successfully' );
-  } catch(err) {
-    console.log(err.message);
+    res.status(201).json('Account created successfully');
+  } catch (err) {
+    console.error(err.message);
     res.status(400).json(err.message);
   }
 });
@@ -76,18 +89,22 @@ app.post('/signin', async (req, res) => {
 
   try {
     if (!user) {
-      return res.status(400).json({message: "Invalid email or password"});
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
     const auth = await bcrypt.compare(password, user.password);
 
     if (!auth) {
-      return res.status(400).json({message: "Invalid email or password"});
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
+    const decipher = crypto.createDecipheriv('aes-256-cbc', process.env.ENCRYPTION_KEY, Buffer.from(user.fullName.iv, 'base64'));
+    let decryptedFullName = decipher.update(user.fullName.encrypted, 'hex', 'utf-8');
+    decryptedFullName += decipher.final('utf-8');
+
     const token = await createToken(user._id);
-    res.status(200).json({message: "Authentication successful", token} );
-  } catch(err) {
+    res.status(200).json({ message: "Authentication successful", token, fullName: decryptedFullName });
+  } catch (err) {
     console.error(err);
     res.status(401).json(err.message);
   }
@@ -124,7 +141,7 @@ app.get('/passwords/:email', async (req, res) => {
   }
 });
 
-app.put('/passwords/:email', async (req, res) => {
+app.post('/passwords/:email', async (req, res) => {
   const { passwordDetails } = req.body;
   const { email } = req.params;
 
@@ -145,12 +162,39 @@ app.put('/passwords/:email', async (req, res) => {
   }
 });
 
+app.put('/passwords/:email/:passwordId', async (req, res) => {
+  const { email, passwordId } = req.params;
+  const { updatedPasswordDetails } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const passwordIndex = user.storedPasswords.findIndex(password => password._id.toString() === passwordId);
+    if (passwordIndex === -1) {
+      return res.status(404).json({ message: 'Password not found' });
+    }
+
+    const { encryptedFields, base64iv } = await encryptPasswordDetails(updatedPasswordDetails, process.env.ENCRYPTION_KEY);
+
+    user.storedPasswords[passwordIndex] = { ...encryptedFields, iv: base64iv };
+    await user.save();
+
+    res.status(200).json({ message: 'Password details updated successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 app.delete('/passwords/:email/:passwordId', async (req, res) => {
   const { email, passwordId } = req.params;
 
   try {
     const user = await User.findOne({ email });
-    console.log(user)
 
     const passwordIndex = user.storedPasswords.findIndex(password => password._id.toString() === passwordId);
     if (passwordIndex === -1) {

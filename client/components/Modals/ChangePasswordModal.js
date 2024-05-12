@@ -12,7 +12,7 @@ export default function ChangePasswordModal({ onDismiss, visible }) {
   const { userEmail } = useContext(AuthContext);
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20}}>
+      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20, marginHorizontal: 10, borderRadius: 10}}>
       <Formik
         initialValues={{ oldPassword: '', newPassword: '', confirmPassword: '' }}
         onSubmit={async (values, { resetForm }) => {

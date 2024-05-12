@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Button, PaperProvider } from 'react-native-paper';
 
-import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import ChangePasswordModal from '../components/Modals/ChangePasswordModal';
 import DeleteAccountModal from '../components/Modals/DeleteAccountModal';
@@ -11,7 +11,7 @@ export default function AccountScreen() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const {logout} = useContext(AuthContext)
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 35 }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 35, backgroundColor: '#c8efe4' }}>
       <PaperProvider>
         <View>
           <Text>Person's name and shit</Text>

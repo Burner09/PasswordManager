@@ -9,12 +9,12 @@ export default function RegisterScreen({navigation}) {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   return (
-    <View style={{flex: 1, justifyContent: 'center', padding: 20}}>
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#c8efe4' }}>
       <Formik
-        initialValues={{ email: '', password: '', confirmpassword: '' }}
+        initialValues={{ firstName: '', lastName: '', email: '', password: '', confirmpassword: '' }}
         onSubmit={(values) => {
           setIsLoading(true);
-          if(!values.email || !values.password || !values.confirmpassword) {
+          if(!values.firstName || !values.lastName || !values.email || !values.password || !values.confirmpassword) {
             setMessage('All fields are required');
             setIsLoading(false)
             return;
@@ -44,24 +44,52 @@ export default function RegisterScreen({navigation}) {
                 style={{height: 200, width: 200, borderRadius: 40, marginBottom: 10}}
               />
             </View>
-            <Text style={{ fontSize: 30, fontWeight: '800', color: '#333', marginBottom: 20, }}>
+            <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444', marginBottom: 20, }}>
               Register
             </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10}}>
+              <TextInput
+                mode="outlined"
+                left={<TextInput.Icon icon="account-cowboy-hat" color="#022444" />}
+                label="First Name"
+                placeholder='Last Name'
+                outlineColor='#022444'
+                activeOutlineColor="#022444"
+                value={props.values.firstName}
+                onChangeText={props.handleChange('firstName')}
+                style={{ flex: 1 }}
+              />
+              <TextInput
+                mode="outlined"
+                label="Last Name"
+                placeholder='Corn'
+                outlineColor='#022444'
+                activeOutlineColor="#022444"
+                value={props.values.lastName}
+                onChangeText={props.handleChange('lastName')}
+                style={{ flex: 1 }}
+              />
+            </View>
             <TextInput
               mode="outlined"
-              left={<TextInput.Icon icon="at" />}
+              left={<TextInput.Icon icon="at"  color="#022444" />}
               label="Email"
+              outlineColor='#022444'
+              activeOutlineColor="#022444"
               value={props.values.email}
               onChangeText={props.handleChange('email')}
             />
             <TextInput
               mode="outlined"
-              left={<TextInput.Icon icon="lock" />}
+              left={<TextInput.Icon icon="lock" color="#022444" />}
               label="Password"
               secureTextEntry={!showPassword}
+              outlineColor='#022444'
+              activeOutlineColor="#022444"
               right={
                 <TextInput.Icon
                   icon={showPassword ? "eye-off" : "eye"}
+                  color="#022444"
                   onPress={() => setShowPassword(!showPassword)}
                 />
               }
@@ -70,14 +98,16 @@ export default function RegisterScreen({navigation}) {
             />
             <TextInput
               mode="outlined"
-              left={<TextInput.Icon icon="lock" />}
+              left={<TextInput.Icon icon="lock" color="#022444" />}
               label="Confirm Password"
+              outlineColor='#022444'
+              activeOutlineColor="#022444"
               secureTextEntry={!showPassword}
               value={props.values.confirmpassword}
               onChangeText={props.handleChange('confirmpassword')}
             />
             {message && <Text style={{color: 'red'}}>{message}</Text>}
-            <Button style={{borderRadius: 4}} loading={isLoading} mode="contained" onPress={props.handleSubmit}>
+            <Button style={{borderRadius: 4}} buttonColor='#f27d42' loading={isLoading} mode="contained" onPress={props.handleSubmit}>
               <Text style={{fontSize: 18, fontWeight: 600}}>Register</Text>
             </Button>
             <View
@@ -88,7 +118,7 @@ export default function RegisterScreen({navigation}) {
               }}>
               <Text style={{fontSize: 16}}>Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={{color: '#AD40AF', fontSize: 16, fontWeight: '700'}}> Login</Text>
+                <Text style={{color: '#022444', fontSize: 16, fontWeight: '700'}}> Login</Text>
               </TouchableOpacity>
             </View>
           </View>

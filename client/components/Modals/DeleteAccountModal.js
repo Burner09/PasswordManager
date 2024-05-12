@@ -13,7 +13,7 @@ export default function DeleteAccountModal({ onDismiss, visible }) {
   
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20}}>
+      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20, marginHorizontal: 10, borderRadius: 10}}>
       <Formik
         initialValues={{ password: '' }}
         onSubmit={async (values, { resetForm }) => {
