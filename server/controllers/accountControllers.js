@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import validator from 'validator'
 import crypto from 'crypto';
 
 import User from '../models/UserSchema.js';
@@ -22,7 +23,6 @@ const encryptName = (data) => {
 // controllers
 export const refreshJWT = async (req, res) => {
   const user = req.user;
-
   try {
     const token = await createToken(user.id);
     res.status(200).json({ message: 'verified', token })
@@ -36,6 +36,10 @@ export const userSignUp = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
 
   try {
+    if(!validator.isEmail(email)) {
+      return res.status(400).json({message: "Please enter a valid email"})
+    }
+
     const user = await User.findOne({ email}, { email: 1} );
 
     if (user) {
@@ -46,7 +50,7 @@ export const userSignUp = async (req, res) => {
       return res.status(400).json({ message: "Password does not meet the requirements" });
     }
 
-    const fullName = firstName + ' ' + lastName;
+    const fullName = `${firstName} ${lastName}`;
     const { encryptedName, iv: base64Iv } = encryptName(fullName);
 
     const salt = await bcrypt.genSalt();
@@ -59,7 +63,7 @@ export const userSignUp = async (req, res) => {
     });
     await newUser.save();
 
-    res.status(201).json('Account created successfully');
+    res.status(201).json({message: 'Account created successfully'});
   } catch (err) {
     console.log(err.message);
     res.status(500).json(err.message);
@@ -68,9 +72,14 @@ export const userSignUp = async (req, res) => {
 
 export const userSignIn = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email }, { fullName: 1, password: 1 });
 
   try {
+    if(!validator.isEmail(email)) {
+      return res.status(400).json({message: "Please enter a valid email"})
+    }
+
+    const user = await User.findOne({ email }, { fullName: 1, password: 1 });
+
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
@@ -162,7 +171,14 @@ export const changeUserEmail = async (req, res) => {
   const { email } = req.params;
 
   try {
+    if(!validator.isEmail(newEmail)) {
+      return res.status(400).json({message: "Please enter a valid email"})
+    }
     const user = await User.findOne({ email }, { email: 1, password: 1 });
+
+    if (email === newEmail) {
+      return res.status(400).json({message: "New email must be different"});
+    }
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -207,7 +223,7 @@ export const deleteUserAccount = async (req, res) => {
 
     await user.deleteOne({ email });
 
-    res.status(200).json({ message: "User deleted successfully" });
+    res.status(200).json({ message: "Account deleted successfully" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });

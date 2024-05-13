@@ -1,24 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Button, PaperProvider, Divider } from 'react-native-paper';
-
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, ToastAndroid } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import ChangePasswordModal from '../components/Modals/ChangePasswordModal';
 import DeleteAccountModal from '../components/Modals/DeleteAccountModal';
 import PrivacyAndSafety from '../components/Modals/PrivacyAndSafety';
+import ChangeEmailModal from '../components/Modals/ChangeEmailModal';
+import ChangeUserNameModal from '../components/Modals/ChangeUserNameModal';
 
-export default function AccountScreen({navigation}) {
+export default function AccountScreen() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [showNameModal, setShowNameModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const { logout, userFullName, userEmail, isActive } = useContext(AuthContext);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      isActive()
-    });
-
-    return unsubscribe;
+    isActive()
   }, []);
 
   const getInitials = (fullName) => {
@@ -27,6 +26,10 @@ export default function AccountScreen({navigation}) {
     const words = fullName.split(' ');
     const initials = words.map((word) => word.charAt(0).toUpperCase());
     return initials.join('');
+  };
+
+  const showToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
   const initials = getInitials(userFullName);
@@ -44,8 +47,30 @@ export default function AccountScreen({navigation}) {
               <Text style={{ fontSize: 18, fontWeight: 500}}>{userFullName}</Text>
               <Text style={{ fontSize: 18, fontWeight: 500}}>{userEmail}</Text>
             </View>
-            <View style={{ padding: 10 }}>
-              <ChangePasswordModal visible={showPasswordModal} onDismiss={() => setShowPasswordModal(false)} />
+            <View style={{ padding: 5 }}>
+              <ChangeUserNameModal showToast={showToast} visible={showNameModal} onDismiss={() => setShowNameModal(false)} />
+              <Button 
+                textColor='#022444'
+                labelStyle={{fontSize: 14, fontWeight: 800}}
+                onPress={() => setShowNameModal(true)}
+              >
+                Change User Name
+              </Button>
+            </View>
+            <Divider bold={true} />
+            <View style={{ padding: 5 }}>
+              <ChangeEmailModal showToast={showToast} visible={showEmailModal} onDismiss={() => setShowEmailModal(false)} />
+              <Button 
+                textColor='#022444'
+                labelStyle={{fontSize: 14, fontWeight: 800}}
+                onPress={() => setShowEmailModal(true)}
+              >
+                Change Email
+              </Button>
+            </View>
+            <Divider bold={true} />
+            <View style={{ padding: 5 }}>
+              <ChangePasswordModal showToast={showToast} visible={showPasswordModal} onDismiss={() => setShowPasswordModal(false)} />
               <Button 
                 textColor='#022444'
                 labelStyle={{fontSize: 14, fontWeight: 800}}
@@ -55,7 +80,7 @@ export default function AccountScreen({navigation}) {
               </Button>
             </View>
             <Divider bold={true} />
-            <View style={{ padding: 10 }}>
+            <View style={{ padding: 5 }}>
               <DeleteAccountModal visible={showDeleteModal} onDismiss={() => setShowDeleteModal(false)} />
               <Button 
                 textColor='#022444'
@@ -66,7 +91,7 @@ export default function AccountScreen({navigation}) {
               </Button>
             </View>
             <Divider bold={true} />
-            <View style={{ padding: 10 }}>
+            <View style={{ padding: 5 }}>
               <PrivacyAndSafety visible={showPrivacyModal} onDismiss={() => setShowPrivacyModal(false)} />
               <Button 
                 textColor='#022444'
@@ -77,13 +102,13 @@ export default function AccountScreen({navigation}) {
               </Button>
             </View>
             <Divider bold={true} />
-            <View style={{ padding: 10 }}>
+            <View style={{ padding: 5 }}>
               <Button 
                 textColor='#022444'
                 labelStyle={{fontSize: 14, fontWeight: 800}}
                 onPress={() => logout()}
               >
-                Sign Out
+                Log Out
               </Button>
             </View>
           </View>

@@ -4,17 +4,18 @@ import { View, Text } from 'react-native';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
-export default function DeletePasswordDetailModal({ onDismiss, visible, account, navigate }) {
+export default function DeletePasswordDetailModal({ onDismiss, visible, account, navigate, showToast }) {
   const { userEmail } = useContext(AuthContext);
 
   const handleDelete = () => {
     axios.delete(`${process.env.EXPO_PUBLIC_API_SERVERURL}/passwords/${userEmail}/${account._id}`)
     .then((res) => {
-      console.log(res.data);
+      showToast(res.data.message)
       onDismiss();
       navigate();
     }).catch((err) => {
-      console.log(err);
+      console.log(err.response.data.message)
+      showToast(err.response.data.message);
     })
   }
 

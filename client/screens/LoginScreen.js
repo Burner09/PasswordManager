@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { TextInput, Button } from 'react-native-paper';
-import { View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, ToastAndroid } from 'react-native';
 import { Formik } from 'formik';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
@@ -11,6 +11,10 @@ export default function LoginScreen({ navigation }) {
   const [message, setMessage] = useState('');
   const { login, userEmail, userFullName } = useContext(AuthContext);
 
+  const showToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 20, paddingTop: 35, backgroundColor: '#c8efe4' }}>
       <Formik
@@ -20,6 +24,7 @@ export default function LoginScreen({ navigation }) {
           setIsLoading(true);
           if (!values.email || !values.password) {
             setMessage('All fields are required');
+            showToast('All fields are required');
             setIsLoading(false);
             return;
           }
@@ -29,7 +34,7 @@ export default function LoginScreen({ navigation }) {
               setIsLoading(false);
             })
             .catch((err) => {
-              setMessage(err.response.data.message);
+              showToast(err.response.data.message);
               setIsLoading(false);
             });
         }}

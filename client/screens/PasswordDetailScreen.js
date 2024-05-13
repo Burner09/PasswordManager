@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, SafeAreaView } from 'react-native'
+import { View, Text, SafeAreaView, ToastAndroid } from 'react-native'
 import { IconButton, PaperProvider, Divider } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import DeletePasswordDetailModal from '../components/Modals/DeletePasswordDetailModal';
@@ -19,6 +19,10 @@ export default function PasswordDetailScreen({navigation, route}) {
 
     return unsubscribe;
   }, []);
+
+  const showToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 35, backgroundColor: '#c8efe4' }}>
@@ -59,7 +63,7 @@ export default function PasswordDetailScreen({navigation, route}) {
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', gap: 10}}>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <EditPasswordDetailModal visible={showEditModal} onDismiss={() => setShowEditModal(false)} account={account} navigate={() => navigation.navigate('All Passwords')}/>
+              <EditPasswordDetailModal showToast={showToast} visible={showEditModal} onDismiss={() => setShowEditModal(false)} account={account} navigate={() => navigation.navigate('All Passwords')}/>
               <IconButton
                 icon="pencil"
                 iconColor='#022444'
@@ -69,7 +73,7 @@ export default function PasswordDetailScreen({navigation, route}) {
               <Text style={{color: '#022444'}}>Edit</Text>
             </View>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <DeletePasswordDetailModal visible={showDeleteModal} onDismiss={() => setShowDeleteModal(false)} account={account} navigate={() => navigation.navigate('All Passwords')}/>
+              <DeletePasswordDetailModal showToast={showToast}  visible={showDeleteModal} onDismiss={() => setShowDeleteModal(false)} account={account} navigate={() => navigation.navigate('All Passwords')}/>
               <IconButton
                 icon="delete"
                 iconColor='#022444'

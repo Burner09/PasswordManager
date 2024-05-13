@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { TextInput, Button } from 'react-native-paper';
-import { View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, ToastAndroid } from 'react-native';
 import { Formik } from 'formik';
 import axios from 'axios';
 
@@ -8,6 +8,11 @@ export default function RegisterScreen({navigation}) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+
+  const showToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#c8efe4' }}>
       <Formik
@@ -16,12 +21,14 @@ export default function RegisterScreen({navigation}) {
           setIsLoading(true);
           if(!values.firstName || !values.lastName || !values.email || !values.password || !values.confirmpassword) {
             setMessage('All fields are required');
+            showToast('All fields are required');
             setIsLoading(false)
             return;
           }
 
           if(values.password !== values.confirmpassword) {
             setMessage('Password does not match');
+            showToast('Password does not match');
             setIsLoading(false)
             return;
           }
@@ -29,9 +36,11 @@ export default function RegisterScreen({navigation}) {
           axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/accounts/signup`, values)
           .then((res) => {
             setIsLoading(false);
-            navigation.navigate('Login')
+            showToast(res.data.message)
+            navigation.navigate('Login');
           }).catch((err) => {
             setMessage(err.response.data.message);
+            showToast(err.response.data.message);
             setIsLoading(false);
           })
         }}

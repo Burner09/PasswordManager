@@ -27,12 +27,12 @@ const generatePassword = (word, length) => {
 
 // controllers
 export const passwordGenerator = (req, res) => {
-  const { word } = req.body;
-
+  let { word } = req.body;
+  word = word.replace(/\s/g, '');
   let length = word.length >= 8? word.length + 4 : 14
 
   try {
-    const generatedPassword = generatePassword(word.replace(/\s/g, ''), length);
+    const generatedPassword = generatePassword(word, length);
 
     res.status(200).json(generatedPassword);
   } catch(err) {
@@ -40,4 +40,3 @@ export const passwordGenerator = (req, res) => {
     res.status(500).json('Internal server error');
   }
 }
-

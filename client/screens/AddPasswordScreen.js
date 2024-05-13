@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { TextInput, Button, RadioButton, PaperProvider } from 'react-native-paper';
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, ToastAndroid } from 'react-native';
 import GeneratePasswordModal from '../components/Modals/GeneratePasswordModal';
 
 export default function AddPasswordScreen({ navigation }) {
@@ -13,12 +13,12 @@ export default function AddPasswordScreen({ navigation }) {
   const { userEmail, isActive } = useContext(AuthContext);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      isActive()
-    });
-
-    return unsubscribe;
+    isActive()
   }, []);
+
+  const showToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  };
   
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 35, backgroundColor: '#c8efe4' }}>
@@ -30,19 +30,22 @@ export default function AddPasswordScreen({ navigation }) {
               setIsLoading(true);
               if (!values.type || !values.name || !values.websiteOrDevice || !values.userName || !values.password) {
                 setMessage('All fields are required');
+                showToast('All fields are required');
                 setIsLoading(false);
                 return;
               }
+
               axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/passwords/${userEmail}`, {passwordDetails: values})
                 .then((res) => {
-                  console.log(res.data)
-                  navigation.navigate('Passwords')
+                  showToast(res.data.message)
                   setIsLoading(false);
                   setMessage('');
                   resetForm();
+                  navigation.navigate('Passwords')
                 }).catch((err) => {
                   console.log(err)
                   setMessage(err.response.data.message);
+                  showToast(err.response.data.message);
                   setIsLoading(false);
                 });
             }}

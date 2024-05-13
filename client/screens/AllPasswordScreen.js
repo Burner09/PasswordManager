@@ -25,8 +25,7 @@ export default function AllPasswordScreen({ navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchData();
-      isActive()
-      setSelectedType('Online Service'); 
+      isActive();
     });
 
     return unsubscribe;

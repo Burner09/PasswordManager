@@ -82,7 +82,7 @@ export const createNewPassword = async (req, res) => {
     user.storedPasswords.push({ ...encryptedFields, iv: base64iv });
     await user.save();
 
-    res.status(200).json('Password stored successfully');
+    res.status(200).json({message: 'Password stored successfully'});
   } catch(err) {
     console.log(err.message);
     res.status(500).json('Internal server error');

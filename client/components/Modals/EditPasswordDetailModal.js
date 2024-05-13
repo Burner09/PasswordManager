@@ -5,7 +5,7 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
-export default function EditPasswordDetailModal({onDismiss, visible, account, navigate}) {
+export default function EditPasswordDetailModal({onDismiss, visible, account, navigate, showToast}) {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const { userEmail } = useContext(AuthContext);
@@ -19,12 +19,21 @@ export default function EditPasswordDetailModal({onDismiss, visible, account, na
             setIsLoading(true);
             if (!values.type || !values.name || !values.websiteOrDevice || !values.userName || !values.password) {
               setMessage('All fields are required');
+              showToast('All fields are required');
               setIsLoading(false);
               return;
             }
+
+            if(values.type === account.type && values.name === account.name && values.websiteOrDevice === account.websiteOrDevice && values.userName === account.userName && values.password === account.password) {
+              setMessage('No changes have been made');
+              showToast('No changes have been made');
+              setIsLoading(false);
+              return;
+            }
+
             axios.put(`${process.env.EXPO_PUBLIC_API_SERVERURL}/passwords/${userEmail}/${account._id}`, {updatedPasswordDetails: values})
               .then((res) => {
-                console.log(res.data)
+                showToast(res.data.message)
                 navigate()
                 setIsLoading(false);
                 setMessage('');
@@ -32,6 +41,7 @@ export default function EditPasswordDetailModal({onDismiss, visible, account, na
               }).catch((err) => {
                 console.log(err)
                 setMessage(err.response.data.message);
+                showToast(err.response.data.message);
                 setIsLoading(false);
               });
           }}

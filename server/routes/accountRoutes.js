@@ -11,8 +11,8 @@ router.post('/signup', userSignUp);
 router.post('/signin', userSignIn);
 
 router.post('/deleteaccount/:email', deleteUserAccount);
-router.put('changeusername/:email', changeUserName)
-router.put('changeuseremail/:email', changeUserEmail)
+router.put('/changeusername/:email', changeUserName)
+router.put('/changeuseremail/:email', changeUserEmail)
 router.put('/changepassword/:email', changeUserAccountPassword);
 
 export default router;

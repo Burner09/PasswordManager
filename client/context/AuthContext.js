@@ -1,4 +1,5 @@
 import React, {createContext, useState, useEffect} from 'react';
+import { ToastAndroid } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 
@@ -10,6 +11,10 @@ export const AuthProvider = ({children}) => {
   const [userEmail, setUserEmail] = useState(null);
   const [userFullName, setUserFullName] = useState(null);
 
+  const showToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  };
+
   const login = (token, email, fullName) => {
     setIsLoading(true);
     setUserToken(token);
@@ -18,14 +23,26 @@ export const AuthProvider = ({children}) => {
     SecureStore.setItemAsync('userToken', token);
     SecureStore.setItemAsync('userEmail', email);
     SecureStore.setItemAsync('userFullName', fullName);
+    showToast('Logged in Successful');
     setIsLoading(false);
   }
 
-  logout = () => {
+  const logout = () => {
     setIsLoading(true);
     SecureStore.deleteItemAsync('userToken')
     setUserToken(null);
+    showToast('Logged out Successful');
     setIsLoading(false);
+  }
+
+  const changeUserFullName = (name) => {
+    setUserFullName(name)
+    SecureStore.setItemAsync('userFullName', name);
+  }
+
+  const changeEmail = ( email) => {
+    setUserEmail(email)
+    SecureStore.setItemAsync('userEmail', email);
   }
 
   deleteAccount = () => {
@@ -36,6 +53,7 @@ export const AuthProvider = ({children}) => {
     setUserToken(null);
     setUserEmail(null);
     setUserFullName(null);
+    showToast('Account Deleted');
     setIsLoading(false);
   }
 
@@ -82,7 +100,7 @@ export const AuthProvider = ({children}) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{login, logout, deleteAccount, isLoading, userToken, userEmail, userFullName, isActive}}>
+    <AuthContext.Provider value={{login, logout, deleteAccount, isLoading, userToken, userEmail, userFullName, isActive, changeEmail, changeUserFullName}}>
       {children}
     </AuthContext.Provider>
   );
