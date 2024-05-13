@@ -20,7 +20,7 @@ export default function DeletePasswordDetailModal({ onDismiss, visible, account,
 
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20, marginHorizontal: 10, borderRadius: 10}}>
+      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20, marginHorizontal: 10, borderWidth: 2, borderRadius: 10, borderColor: '#022444'}}>
         <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444', marginBottom: 20, textAlign: 'center' }}>
           Delete {account.name}?
         </Text>

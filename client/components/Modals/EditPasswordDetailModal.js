@@ -12,10 +12,7 @@ export default function EditPasswordDetailModal({onDismiss, visible, account, na
 
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20, marginHorizontal: 10, borderRadius: 10}}>
-        <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444', marginBottom: 20, textAlign: 'center' }}>
-           Edit Details
-        </Text>
+      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 10, marginHorizontal: 10, borderWidth: 2, borderRadius: 10, borderColor: '#022444'}}>
         <Formik
           initialValues={{ type: account.type, name: account.name, websiteOrDevice: account.websiteOrDevice, userName: account.userName, password: account.password }}
           onSubmit={async (values, { resetForm }) => {
@@ -41,6 +38,9 @@ export default function EditPasswordDetailModal({onDismiss, visible, account, na
         >
           {(props) => (
             <View style={{gap: 20}}>
+              <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444',textAlign: 'center' }}>
+                Edit Details
+              </Text>
               <RadioButton.Group onValueChange={props.handleChange('type')} value={props.values.type}>
                 <Text style={{ fontSize: 18, fontWeight: 600, color: '#022444' }}>Type:</Text>
                 <View style={{ flexDirection: 'row', gap: 20 }}>
@@ -54,13 +54,13 @@ export default function EditPasswordDetailModal({onDismiss, visible, account, na
                   </View>
                 </View>
               </RadioButton.Group>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 20}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5}}>
                 <TextInput
                   mode="outlined"
                   label="Name"
                   placeholder='This account'
                   outlineColor='#022444'
-                  activeOutlineColor="#022444"
+                  activeOutlineColor="#f27d42"
                   value={props.values.name}
                   onChangeText={props.handleChange('name')}
                   style={{ flex: 1 }}
@@ -70,7 +70,7 @@ export default function EditPasswordDetailModal({onDismiss, visible, account, na
                   label="Website/ Device"
                   placeholder='youtube.com'
                   outlineColor='#022444'
-                  activeOutlineColor="#022444"
+                  activeOutlineColor="#f27d42"
                   value={props.values.websiteOrDevice}
                   onChangeText={props.handleChange('websiteOrDevice')}
                   style={{ flex: 1 }}
@@ -81,7 +81,7 @@ export default function EditPasswordDetailModal({onDismiss, visible, account, na
                 label="Username/ Email"
                 placeholder='Byrd_202'
                 outlineColor='#022444'
-                activeOutlineColor="#022444"
+                activeOutlineColor="#f27d42"
                 value={props.values.userName}
                 onChangeText={props.handleChange('userName')}
               />
@@ -90,7 +90,7 @@ export default function EditPasswordDetailModal({onDismiss, visible, account, na
                 label="Password"
                 placeholder='Abc123(;-;)'
                 outlineColor='#022444'
-                activeOutlineColor="#022444"
+                activeOutlineColor="#f27d42"
                 value={props.values.password}
                 onChangeText={props.handleChange('password')}
               />

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Formik } from 'formik';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
@@ -10,7 +10,15 @@ export default function AddPasswordScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState('');
-  const { userEmail } = useContext(AuthContext);
+  const { userEmail, isActive } = useContext(AuthContext);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      isActive()
+    });
+
+    return unsubscribe;
+  }, []);
   
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 35, backgroundColor: '#c8efe4' }}>
@@ -41,87 +49,87 @@ export default function AddPasswordScreen({ navigation }) {
           >
             {(props) => (
               <View style={{gap: 20}}>
-                <Text style={{ fontSize: 32, fontWeight: '800', color: '#022444', marginBottom: 20, }}>
+                <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444', marginBottom: 20, }}>
                   Save New Account
                 </Text>
                 
-                <RadioButton.Group onValueChange={props.handleChange('type')} value={props.values.type}>
-                  <Text style={{ fontSize: 18, fontWeight: 600, color: '#022444' }}>Type:</Text>
-                  <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <RadioButton value="Online Service" color='#f27d42' />
-                      <Text style={{ fontSize: 16, color: '#022444' }}>Online Service</Text>
+                <View style={{backgroundColor: '#fff', padding: 10, borderWidth: 2, borderRadius: 10, borderColor: '#022444', gap: 15}}>
+                  <RadioButton.Group onValueChange={props.handleChange('type')} value={props.values.type}>
+                    <Text style={{ fontSize: 18, fontWeight: 600, color: '#022444' }}>Type:</Text>
+                    <View style={{ flexDirection: 'row', gap: 20 }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <RadioButton value="Online Service" color='#f27d42' />
+                        <Text style={{ fontSize: 16, color: '#022444' }}>Online Service</Text>
+                      </View>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <RadioButton value="Device" color='#f27d42' />
+                        <Text style={{ fontSize: 16, color: '#022444' }}>Device</Text>
+                      </View>
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <RadioButton value="Device" color='#f27d42' />
-                      <Text style={{ fontSize: 16, color: '#022444' }}>Device</Text>
-                    </View>
+                  </RadioButton.Group>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5}}>
+                    <TextInput
+                      mode="outlined"
+                      label="Name"
+                      placeholder='This account'
+                      outlineColor='#022444'
+                      activeOutlineColor="#f27d42"
+                      value={props.values.name}
+                      onChangeText={props.handleChange('name')}
+                      style={{ flex: 1 }}
+                    />
+                    <TextInput
+                      mode="outlined"
+                      label="Website/ Device"
+                      placeholder='youtube.com'
+                      outlineColor='#022444'
+                      activeOutlineColor="#f27d42"
+                      value={props.values.websiteOrDevice}
+                      onChangeText={props.handleChange('websiteOrDevice')}
+                      style={{ flex: 1 }}
+                    />
                   </View>
-                </RadioButton.Group>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 20}}>
                   <TextInput
                     mode="outlined"
-                    label="Name"
-                    placeholder='This account'
+                    label="Username/ Email"
+                    placeholder='Byrd_202'
                     outlineColor='#022444'
-                    activeOutlineColor="#022444"
-                    value={props.values.name}
-                    onChangeText={props.handleChange('name')}
-                    style={{ flex: 1 }}
+                    activeOutlineColor="#f27d42"
+                    value={props.values.userName}
+                    onChangeText={props.handleChange('userName')}
                   />
                   <TextInput
                     mode="outlined"
-                    label="Website/ Device"
-                    placeholder='youtube.com'
+                    label="Password"
+                    placeholder='Abc123(;-;)'
                     outlineColor='#022444'
-                    activeOutlineColor="#022444"
-                    value={props.values.websiteOrDevice}
-                    onChangeText={props.handleChange('websiteOrDevice')}
-                    style={{ flex: 1 }}
+                    activeOutlineColor="#f27d42"
+                    value={props.values.password}
+                    onChangeText={props.handleChange('password')}
                   />
-                </View>
-                <TextInput
-                  mode="outlined"
-                  label="Username/ Email"
-                  placeholder='Byrd_202'
-                  outlineColor='#022444'
-                  activeOutlineColor="#022444"
-                  value={props.values.userName}
-                  onChangeText={props.handleChange('userName')}
-                />
-                <TextInput
-                  mode="outlined"
-                  label="Password"
-                  placeholder='Abc123(;-;)'
-                  outlineColor='#022444'
-                  activeOutlineColor="#022444"
-                  value={props.values.password}
-                  onChangeText={props.handleChange('password')}
-                />
-                {message && <Text style={{color: 'red'}}>{message}</Text>}
-                <Button 
-                  style={{borderRadius: 4}} 
-                  labelStyle={{fontSize: 18, fontWeight: 600}}
-                  loading={isLoading} 
-                  buttonColor='#f27d42' 
-                  mode="contained" 
-                  onPress={props.handleSubmit}
-                >
-                  Save Account
-                </Button>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    marginBottom: 10,
-                  }}>
+                  {message && <Text style={{color: 'red'}}>{message}</Text>}
+                  <Button 
+                    style={{borderRadius: 4}} 
+                    labelStyle={{fontSize: 18, fontWeight: 600}}
+                    loading={isLoading} 
+                    buttonColor='#f27d42' 
+                    mode="contained" 
+                    onPress={props.handleSubmit}
+                  >
+                    Save Account
+                  </Button>
                 </View>
                 <View>
                   <GeneratePasswordModal visible={showModal} usePassword={password => {
                     props.setFieldValue('password', password);
                     setShowModal(false);
                   }} onDismiss={() => setShowModal(false)}/>
-                  <Button style={{marginTop: 10}} textColor='#022444' onPress={() => setShowModal(true)}>
+                  <Button 
+                    style={{marginTop: 10}} 
+                    textColor='#022444' 
+                    labelStyle={{fontSize: 18, fontWeight: 800}}
+                    onPress={() => setShowModal(true)}
+                  >
                     Generate Password
                   </Button>
                 </View>

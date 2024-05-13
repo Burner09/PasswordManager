@@ -16,7 +16,8 @@ export default function AppStack() {
         tabBarShowLabel: false,
         tabBarInactiveTintColor: '#c8efe4',
         tabBarActiveTintColor: '#f27d42',
-        tabBarStyle: { backgroundColor: '#022444', height: 70 },
+        tabBarStyle: { backgroundColor: '#022444', height: 55 },
+        tabBarHideOnKeyboard: true
       }}
     >
       <Tab.Screen 

@@ -3,7 +3,7 @@ import validator from 'validator'
 
 const userSchema = mongoose.Schema({
   fullName: {
-    encrypted: {
+    name: {
       type: String,
       required: true
     },

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { TextInput, Button } from 'react-native-paper';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import axios from 'axios';
 
@@ -9,7 +9,7 @@ export default function RegisterScreen({navigation}) {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#c8efe4' }}>
+    <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#c8efe4' }}>
       <Formik
         initialValues={{ firstName: '', lastName: '', email: '', password: '', confirmpassword: '' }}
         onSubmit={(values) => {
@@ -26,7 +26,7 @@ export default function RegisterScreen({navigation}) {
             return;
           }
 
-          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/signup`, values)
+          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/accounts/signup`, values)
           .then((res) => {
             setIsLoading(false);
             navigation.navigate('Login')
@@ -38,10 +38,13 @@ export default function RegisterScreen({navigation}) {
       >
         {(props) => (
           <View style={{gap: 15}}>
+            <Text style={{ fontSize: 35, fontWeight: 800, color:'#022444', textAlign: 'center' }}>
+              COBCRYPT
+            </Text>
             <View style={{alignItems: 'center'}}>
               <Image
                 source={require('../assets/authimage.png')}
-                style={{height: 200, width: 200, borderRadius: 40, marginBottom: 10}}
+                style={{height: 150, width: 150, borderRadius: 40, marginBottom: 10}}
               />
             </View>
             <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444', marginBottom: 20, }}>
@@ -54,7 +57,7 @@ export default function RegisterScreen({navigation}) {
                 label="First Name"
                 placeholder='Last Name'
                 outlineColor='#022444'
-                activeOutlineColor="#022444"
+                activeOutlineColor="#f27d42"
                 value={props.values.firstName}
                 onChangeText={props.handleChange('firstName')}
                 style={{ flex: 1 }}
@@ -64,7 +67,7 @@ export default function RegisterScreen({navigation}) {
                 label="Last Name"
                 placeholder='Corn'
                 outlineColor='#022444'
-                activeOutlineColor="#022444"
+                activeOutlineColor="#f27d42"
                 value={props.values.lastName}
                 onChangeText={props.handleChange('lastName')}
                 style={{ flex: 1 }}
@@ -75,7 +78,7 @@ export default function RegisterScreen({navigation}) {
               left={<TextInput.Icon icon="at"  color="#022444" />}
               label="Email"
               outlineColor='#022444'
-              activeOutlineColor="#022444"
+              activeOutlineColor="#f27d42"
               value={props.values.email}
               onChangeText={props.handleChange('email')}
             />
@@ -85,7 +88,7 @@ export default function RegisterScreen({navigation}) {
               label="Password"
               secureTextEntry={!showPassword}
               outlineColor='#022444'
-              activeOutlineColor="#022444"
+              activeOutlineColor="#f27d42"
               right={
                 <TextInput.Icon
                   icon={showPassword ? "eye-off" : "eye"}
@@ -101,14 +104,21 @@ export default function RegisterScreen({navigation}) {
               left={<TextInput.Icon icon="lock" color="#022444" />}
               label="Confirm Password"
               outlineColor='#022444'
-              activeOutlineColor="#022444"
+              activeOutlineColor="#f27d42"
               secureTextEntry={!showPassword}
               value={props.values.confirmpassword}
               onChangeText={props.handleChange('confirmpassword')}
             />
             {message && <Text style={{color: 'red'}}>{message}</Text>}
-            <Button style={{borderRadius: 4}} buttonColor='#f27d42' loading={isLoading} mode="contained" onPress={props.handleSubmit}>
-              <Text style={{fontSize: 18, fontWeight: 600}}>Register</Text>
+            <Button 
+              style={{borderRadius: 4}} 
+              labelStyle={{fontSize: 18, fontWeight: 600}}
+              buttonColor='#f27d42' 
+              loading={isLoading} 
+              mode="contained" 
+              onPress={props.handleSubmit}
+            >
+              Register
             </Button>
             <View
               style={{
@@ -124,6 +134,6 @@ export default function RegisterScreen({navigation}) {
           </View>
         )}
       </Formik>
-    </View>
+    </SafeAreaView>
   );
 }

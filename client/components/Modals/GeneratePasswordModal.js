@@ -8,7 +8,7 @@ export default function GeneratePasswordModal({ onDismiss,visible, usePassword }
   const [generatedPassword, setGeneratedPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [isUseWord, setIsUseWord] = React.useState(false);
+  const [isUseWord, setIsUseWord] = useState(false);
 
   const handleUsePassword = () => {
     if (generatedPassword) {
@@ -24,7 +24,7 @@ export default function GeneratePasswordModal({ onDismiss,visible, usePassword }
 
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={dismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20, marginHorizontal: 10, borderRadius: 10}}>
+      <Modal visible={visible} onDismiss={dismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20, marginHorizontal: 10, borderWidth: 2, borderRadius: 10, borderColor: '#022444'}}>
       <Formik
         initialValues={{ word: '' }}
         onSubmit={async (values, { resetForm }) => {
@@ -42,18 +42,18 @@ export default function GeneratePasswordModal({ onDismiss,visible, usePassword }
       >
           {(props) => (
             <View style={{gap: 20}}>
-              <Text style={{ fontSize: 30, fontWeight: '800', color: '#333', marginBottom: 20, textAlign: 'center' }}>
+              <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444', marginBottom: 20, textAlign: 'center' }}>
                 Generate Password
               </Text>
               <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontSize: 18}}>Customize with Word</Text>
+                <Text style={{fontSize: 18, color: '#022444'}}>Customize with Word</Text>
                 <Switch value={isUseWord} color='#f27d42' onValueChange={() => {setIsUseWord(!isUseWord)}} />
               </View>
               {isUseWord && <TextInput
                 mode="outlined"
                 label="Enter Word or Phrase"
                 outlineColor='#022444'
-                activeOutlineColor="#022444"
+                activeOutlineColor="#f27d42"
                 value={props.values.word}
                 onChangeText={props.handleChange('word')}
               />}

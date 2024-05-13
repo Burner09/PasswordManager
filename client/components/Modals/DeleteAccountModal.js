@@ -13,7 +13,7 @@ export default function DeleteAccountModal({ onDismiss, visible }) {
   
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20, marginHorizontal: 10, borderRadius: 10}}>
+      <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={{backgroundColor: 'white', padding: 20, marginHorizontal: 10, borderWidth: 2, borderRadius: 10, borderColor: '#022444'}}>
       <Formik
         initialValues={{ password: '' }}
         onSubmit={async (values, { resetForm }) => {
@@ -23,7 +23,7 @@ export default function DeleteAccountModal({ onDismiss, visible }) {
             setIsLoading(false);
             return;
           }
-          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/deleteaccount/${userEmail}`, values)
+          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/accounts/deleteaccount/${userEmail}`, values)
             .then((res) => {
               console.log(res.data)
               onDismiss();
@@ -40,17 +40,20 @@ export default function DeleteAccountModal({ onDismiss, visible }) {
       >
           {(props) => (
             <View style={{gap: 20}}>
-              <Text style={{ fontSize: 30, fontWeight: '800', color: '#333', marginBottom: 20, textAlign: 'center' }}>
-                Please confirm delete
+              <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444', textAlign: 'center' }}>
+                Confirm delete
               </Text>
               <TextInput
                 mode="outlined"
-                left={<TextInput.Icon icon="lock" />}
+                left={<TextInput.Icon icon="lock" color="#022444" />}
                 label="Enter Password"
+                outlineColor='#022444'
+                activeOutlineColor="#f27d42"
                 secureTextEntry={!showPassword}
                 right={
                   <TextInput.Icon
                     icon={showPassword ? "eye-off" : "eye"}
+                    color="#022444"
                     onPress={() => setShowPassword(!showPassword)}
                   />
                 }
@@ -59,11 +62,24 @@ export default function DeleteAccountModal({ onDismiss, visible }) {
               />
               {message && <Text style={{color: 'red'}}>{message}</Text>}
               <View style={{ marginBottom: 25, flexDirection: 'row', gap: 20}}>
-                <Button style={{flex: 1, borderRadius: 4}} mode="contained" onPress={()=>{onDismiss();setMessage('');}}>
-                  <Text style={{fontSize: 15, fontWeight: 600}}>Cancel</Text>
+                <Button 
+                  style={{flex: 1, borderRadius: 4}} 
+                  labelStyle={{fontSize: 15, fontWeight: 600}}
+                  buttonColor='#f27d42' 
+                  mode="contained" 
+                  onPress={()=>{onDismiss();setMessage('');}}
+                >
+                  Cancel
                 </Button>
-                <Button style={{flex: 1, borderRadius: 4}} loading={isLoading} mode="contained" onPress={props.handleSubmit}>
-                  <Text style={{fontSize: 15, fontWeight: 600}}>Delete Account</Text>
+                <Button 
+                  style={{flex: 1, borderRadius: 4}} 
+                  labelStyle={{fontSize: 15, fontWeight: 600}}
+                  buttonColor='#f27d42'
+                  loading={isLoading} 
+                  mode="contained" 
+                  onPress={props.handleSubmit}
+                >
+                  Delete
                 </Button>
               </View>             
             </View>

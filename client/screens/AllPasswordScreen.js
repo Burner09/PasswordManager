@@ -10,7 +10,7 @@ export default function AllPasswordScreen({ navigation }) {
   const [accounts, setAccounts] = useState([]);
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const [selectedType, setSelectedType] = useState('Online Service');
-  const { userEmail, userFullName } = useContext(AuthContext);
+  const { userEmail, userFullName, isActive } = useContext(AuthContext);
 
   const fetchData = () => {
     axios.get(`${process.env.EXPO_PUBLIC_API_SERVERURL}/passwords/${userEmail}`)
@@ -23,11 +23,9 @@ export default function AllPasswordScreen({ navigation }) {
   };
 
   useEffect(() => {
-    fetchData();
-    setSelectedType('Online Service'); 
-
     const unsubscribe = navigation.addListener('focus', () => {
       fetchData();
+      isActive()
       setSelectedType('Online Service'); 
     });
 
@@ -42,31 +40,31 @@ export default function AllPasswordScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 35, backgroundColor: '#c8efe4' }}>
       <View style={{ flex: 1, padding: 20 }}>
-        <Text style={{ fontSize: 35, fontWeight: 800, color:'#022444', marginBottom: 20 }}>
+        <Text style={{ fontSize: 30, fontWeight: 800, color:'#022444', marginBottom: 20 }}>
           COBCRYPT
         </Text>
-        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 40, borderWidth: 1,  backgroundColor: '#f27d42', borderRadius: 10}}>
-          <Text style={{fontSize: 25, fontWeight: 700, color: '#fff'}}>Hello Corn Lover {userFullName}</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: screenHeight * 0.025, borderWidth: 2, borderRadius: 10, borderColor: '#022444',  backgroundColor: '#f27d42' }}>
+          <Text style={{fontSize: 20, fontWeight: 700, color: '#fff'}}>Hello {userFullName}</Text>
         </View>
 
         <View style={{  marginTop: 15 }}>
           <Text style={{fontSize: 20, color:'#022444', fontWeight: 700, marginBottom: 10}}>Your Cobs Sire</Text>
-          <View style={{padding: 10}}>
+          <View style={{padding: 10, borderWidth: 2, borderRadius: 10, borderColor: '#022444', backgroundColor: '#fff'}}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20 }}>
               <Button 
                 style={{ flex: 1 }} 
-                labelStyle={{ fontSize: 16 }}
+                labelStyle={{ fontSize: 12 }}
                 buttonColor={selectedType === 'Online Service' ? '#022444' : ''} 
                 textColor={selectedType !== 'Online Service' ? '#022444' : ''} 
                 icon="web" 
                 mode={selectedType === 'Online Service' ? 'contained' : 'text'} 
                 onPress={() => filterAccounts('Online Service', accounts)}
               >
-                Online Services {selectedType === 'Online Service' && `(${filteredAccounts.length})`}
+                Web Services {selectedType === 'Online Service' && `(${filteredAccounts.length})`}
               </Button>
               <Button 
                 style={{ flex: 1 }} 
-                labelStyle={{ fontSize: 16 }}
+                labelStyle={{ fontSize: 12 }}
                 buttonColor={selectedType === 'Device' ? '#022444' : ''} 
                 textColor={selectedType !== 'Device' ? '#022444' : ''} 
                 icon="devices" 
@@ -77,7 +75,7 @@ export default function AllPasswordScreen({ navigation }) {
               </Button>
             </View>
 
-            <ScrollView style={{flexGrow: 0, maxHeight: screenHeight * 0.55}}>
+            <ScrollView style={{flexGrow: 0, maxHeight: screenHeight * 0.5}}>
               {filteredAccounts.length > 0 ? filteredAccounts.map((account, index) => (
                 <TouchableOpacity key={index} onPress={() => navigation.navigate('Password Detail', { account })}>
                   <View style={{ backgroundColor: '#fff', borderWidth: 1, borderRadius: 10, marginBottom: 10, padding: 5, paddingLeft: 25 }}>

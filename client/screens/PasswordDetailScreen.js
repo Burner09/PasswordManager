@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, SafeAreaView } from 'react-native'
 import { IconButton, PaperProvider, Divider } from 'react-native-paper';
+import { AuthContext } from '../context/AuthContext';
 import DeletePasswordDetailModal from '../components/Modals/DeletePasswordDetailModal';
 import EditPasswordDetailModal from '../components/Modals/EditPasswordDetailModal';
 
@@ -8,21 +9,31 @@ export default function PasswordDetailScreen({navigation, route}) {
   const { account } = route.params;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const { isActive } = useContext(AuthContext);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      isActive()
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 35, backgroundColor: '#c8efe4' }}>
       <PaperProvider>
+        <View style={{flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 10}}>
+          <IconButton
+            icon="arrow-left-circle"
+            iconColor='#022444'
+            size={40}
+            onPress={() => navigation.navigate('All Passwords')}
+          />
+          <Text style={{fontSize: 26, fontWeight: 800, color:'#022444'}}>Password Details</Text>
+        </View>
         <View style={{ flex: 1, padding: 20 }}>
-          <View style={{flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 30}}>
-            <IconButton
-              icon="arrow-left"
-              size={35}
-              onPress={() => navigation.navigate('All Passwords')}
-            />
-            <Text style={{fontSize: 26, fontWeight: 800, color:'#022444'}}>Password Details</Text>
-          </View>
-          <View style={{backgroundColor: '#fff', padding: 15, borderRadius: 10, marginBottom: 30}}>
+          <View style={{backgroundColor: '#fff', padding: 15, borderWidth: 2, borderRadius: 10, borderColor: '#022444', marginBottom: 30}}>
             <View style={{ padding: 15 }}>
               <Text style={{ fontSize: 18, fontWeight: 600, color:'#022444' }}>Name</Text>
               <Text style={{ fontSize: 18, color:'#022444' }}>{account.name}</Text>

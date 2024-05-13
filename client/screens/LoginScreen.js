@@ -1,6 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { TextInput, Button } from 'react-native-paper';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
@@ -12,7 +12,7 @@ export default function LoginScreen({ navigation }) {
   const { login, userEmail, userFullName } = useContext(AuthContext);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#c8efe4' }}>
+    <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 20, paddingTop: 35, backgroundColor: '#c8efe4' }}>
       <Formik
         enableReinitialize={true}
         initialValues={{ email: userEmail, password: '', fullName: userFullName }}
@@ -23,7 +23,7 @@ export default function LoginScreen({ navigation }) {
             setIsLoading(false);
             return;
           }
-          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/signin`, values)
+          axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/accounts/signin`, values)
             .then((res) => {
               login(res.data.token, values.email, res.data.fullName);
               setIsLoading(false);
@@ -36,10 +36,13 @@ export default function LoginScreen({ navigation }) {
       >
         {(props) => (
           <View style={{ gap: 15 }}>
+            <Text style={{ fontSize: 35, fontWeight: 800, color:'#022444', textAlign: 'center' }}>
+              COBCRYPT
+            </Text>
             <View style={{ alignItems: 'center' }}>
               <Image
                 source={require('../assets/authimage.png')}
-                style={{ height: 200, width: 200, borderRadius: 40, marginBottom: 10 }}
+                style={{ height: 150, width: 150, borderRadius: 40, marginBottom: 10 }}
               />
             </View>
             <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444', marginBottom: 20 }}>
@@ -50,7 +53,7 @@ export default function LoginScreen({ navigation }) {
               left={<TextInput.Icon icon="at" color="#022444" />}
               label="Email"
               outlineColor='#022444'
-              activeOutlineColor="#022444"
+              activeOutlineColor="#f27d42"
               value={props.values.email}
               onChangeText={props.handleChange('email')}
             />
@@ -59,7 +62,7 @@ export default function LoginScreen({ navigation }) {
               left={<TextInput.Icon icon="lock" color="#022444"/>}
               label="Password"
               outlineColor='#022444'
-              activeOutlineColor="#022444"
+              activeOutlineColor="#f27d42"
               secureTextEntry={!showPassword}
               right={
                 <TextInput.Icon
@@ -72,8 +75,15 @@ export default function LoginScreen({ navigation }) {
               onChangeText={props.handleChange('password')}
             />
             {message && <Text style={{ color: 'red' }}>{message}</Text>}
-            <Button style={{ borderRadius: 4 }} buttonColor='#f27d42' loading={isLoading} mode="contained" onPress={props.handleSubmit}>
-              <Text style={{ fontSize: 18, fontWeight: 600 }}>Login</Text>
+            <Button 
+              style={{ borderRadius: 4 }} 
+              labelStyle={{fontSize: 18, fontWeight: 600}}
+              buttonColor='#f27d42' 
+              loading={isLoading} 
+              mode="contained" 
+              onPress={props.handleSubmit}
+            >
+              Login
             </Button>
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30, }}>
               <Text style={{ fontSize: 16 }}>New to this app?</Text>
@@ -84,6 +94,6 @@ export default function LoginScreen({ navigation }) {
           </View>
         )}
       </Formik>
-    </View>
+    </SafeAreaView>
   );
 }
