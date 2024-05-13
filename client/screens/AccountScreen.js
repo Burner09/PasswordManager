@@ -35,7 +35,7 @@ export default function AccountScreen() {
   const initials = getInitials(userFullName);
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 10, backgroundColor: '#c8efe4' }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 5, backgroundColor: '#c8efe4' }}>
       <PaperProvider>
         <View style={{ flex: 1, padding: 15 }}>
           <Text style={{ fontSize: 30, fontWeight: '800', color: '#022444', marginBottom: 20 }}>

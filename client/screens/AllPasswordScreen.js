@@ -37,7 +37,7 @@ export default function AllPasswordScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 10, backgroundColor: '#c8efe4' }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 5, backgroundColor: '#c8efe4' }}>
       <View style={{ flex: 1, padding: 20 }}>
         <Text style={{ fontSize: 30, fontWeight: 800, color:'#022444', marginBottom: 20 }}>
           COBCRYPT

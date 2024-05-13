@@ -21,7 +21,7 @@ export default function AddPasswordScreen({ navigation }) {
   };
   
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 10, backgroundColor: '#c8efe4' }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 5, backgroundColor: '#c8efe4' }}>
       <PaperProvider>
         <View style={{ flex: 1, padding: 15 }}>
           <Formik
@@ -74,7 +74,6 @@ export default function AddPasswordScreen({ navigation }) {
                     <TextInput
                       mode="outlined"
                       label="Name"
-                      theme={{dark: true}}
                       placeholder='This account'
                       outlineColor='#022444'
                       activeOutlineColor="#f27d42"

@@ -25,7 +25,7 @@ export default function PasswordDetailScreen({navigation, route}) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 10, backgroundColor: '#c8efe4' }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 5, backgroundColor: '#c8efe4' }}>
       <PaperProvider>
         <View style={{flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 10}}>
           <IconButton
