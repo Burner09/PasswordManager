@@ -61,11 +61,10 @@ export const AuthProvider = ({children}) => {
     axios.post(`${process.env.EXPO_PUBLIC_API_SERVERURL}/accounts/auth`, {token: userToken})
     .then((res) => {
       setUserToken(res.data.token)
-      setIsLoading(false);
     }).catch((err) => {
       console.log(err)
+      showToast('You were away for too long');
       setUserToken(null);
-      setIsLoading(false);
     })
   }
 

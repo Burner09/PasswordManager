@@ -16,7 +16,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 20, paddingTop: 35, backgroundColor: '#c8efe4' }}>
+    <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#c8efe4' }}>
       <Formik
         enableReinitialize={true}
         initialValues={{ email: userEmail, password: '', fullName: userFullName }}

@@ -7,7 +7,7 @@ import User from '../models/UserSchema.js';
 
 // helper functions
 export const createToken = async (id) => {
-  const maxAge = 60 * 60 ;
+  const maxAge = 60 * 5;
   return jwt.sign({ id }, process.env.SECRETMESSAGE, { expiresIn: maxAge });
 };
 
